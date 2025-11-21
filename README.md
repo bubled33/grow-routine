@@ -28,13 +28,3 @@ Grow-Routine emulates a massive network of concurrent IoT sensors for a smart gr
 3.  **Control Plane (State):** In-memory storage of sensor states protected by RWMutex.
 4.  **Action Workers (Pool):** Worker pool processing complex events (e.g., "Cooling System").
 5.  **Orchestrator:** Manages lifecycle, configuration updates, and system shutdown.
-
-## 🚦 Getting Started
-
-### Prerequisites
-
-- Go 1.25 or higher
-- Make (optional)
-
-### Installation
-
