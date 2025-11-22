@@ -1,4 +1,4 @@
-package workers
+package sensor_service
 
 import (
 	"context"

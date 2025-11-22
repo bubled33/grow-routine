@@ -3,11 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"time"
-
-	// Подставь свои пути импорта!
+	"grow-routine/internal/app/hub"
+	sensor_service "grow-routine/internal/app/sensor"
 	"grow-routine/internal/domain/sensor"
-	"grow-routine/internal/infra/workers"
+	"time"
 )
 
 func main() {
@@ -16,25 +15,17 @@ func main() {
 
 	dataChan := make(chan *sensor.SensorPacket, 10)
 
-	worker := workers.NewMockSensorConsumer(
+	worker := sensor_service.NewMockSensorConsumer(
 		100*time.Millisecond,
 		500*time.Millisecond,
 	)
+	hub := hub.NewHub(dataChan, 10)
 
 	fmt.Println("🚀 Starting sensor...")
 	go worker.RunSensor(ctx, "sensor-1", dataChan)
-
 	fmt.Println("👂 Waiting for data...")
-
+	go hub.Run(ctx)
 	for {
-		select {
-		case packet := <-dataChan:
-			fmt.Printf("Received: [%s] %.2f (Type: %s)\n",
-				packet.SensorID, packet.Value, packet.Type)
 
-		case <-ctx.Done():
-			fmt.Println("🛑 Time is up! Shutting down.")
-			return
-		}
 	}
 }
